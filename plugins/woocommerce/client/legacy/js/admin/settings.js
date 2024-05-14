@@ -1,6 +1,5 @@
 /* global woocommerce_settings_params, wp */
 ( function ( $, params, wp ) {
-	console.log('heeyyy');
 	$( function () {
 		// Sell Countries
 		$( 'select#woocommerce_allowed_countries' )
