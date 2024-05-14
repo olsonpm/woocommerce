@@ -1,5 +1,6 @@
 /* global woocommerce_settings_params, wp */
 ( function ( $, params, wp ) {
+	console.log('heeyyy');
 	$( function () {
 		// Sell Countries
 		$( 'select#woocommerce_allowed_countries' )
@@ -94,7 +95,7 @@
 			var changed = false;
 			let $check_column = $( '.wp-list-table .check-column' );
 
-			$( 'input, textarea, select, checkbox' ).on( 'change', function (
+			$( 'input, textarea, select, checkbox' ).on( 'change input', function (
 				event
 			) {
 				// Toggling WP List Table checkboxes should not trigger navigation warnings.
@@ -110,6 +111,7 @@
 						return params.i18n_nav_warning;
 					};
 					changed = true;
+					$( '.woocommerce-save-button' ).removeAttr( 'disabled' );
 				}
 			} );
 
