@@ -26,9 +26,11 @@ test.describe( 'WooCommerce General Settings', () => {
 
 		// Set selling location to all countries first so we can
 		// choose California as base location.
+		const changePromise = page.waitForEvent( 'change' );
 		await page
 			.locator( '#woocommerce_allowed_countries' )
 			.selectOption( 'all' );
+		await changePromise;
 		await page.locator( 'text=Save changes' ).click();
 
 		// confirm setting saved
