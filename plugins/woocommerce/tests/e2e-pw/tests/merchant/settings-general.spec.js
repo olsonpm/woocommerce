@@ -51,9 +51,7 @@ test.describe( 'WooCommerce General Settings', () => {
 		await page
 			.locator( '#woocommerce_allowed_countries' )
 			.selectOption( 'all' );
-		let saveButton = page.locator( 'text=Save changes' );
-		await saveButton.waitForElementState( 'enabled' );
-		await saveButton.click();
+		await page.locator( 'text=Save changes' ).click();
 
 		// confirm setting saved
 		await expect( page.locator( 'div.updated.inline' ) ).toContainText(
@@ -67,9 +65,7 @@ test.describe( 'WooCommerce General Settings', () => {
 		await page
 			.locator( 'select[name="woocommerce_default_country"]' )
 			.selectOption( 'US:CA' );
-		saveButton = page.locator( 'text=Save changes' );
-		await saveButton.waitForElementState( 'enabled' );
-		await saveButton.click();
+		await page.locator( 'text=Save changes' ).click();
 
 		// verify the settings have been saved
 		await expect( page.locator( 'div.updated.inline' ) ).toContainText(
@@ -95,9 +91,7 @@ test.describe( 'WooCommerce General Settings', () => {
 		await page.locator( '#woocommerce_price_decimal_sep' ).fill( '.' );
 		await page.locator( '#woocommerce_price_num_decimals' ).fill( '2' );
 
-		saveButton = page.locator( 'text=Save changes' );
-		await saveButton.waitForElementState( 'enabled' );
-		await saveButton.click();
+		await page.locator( 'text=Save changes' ).click();
 
 		// verify that settings have been saved
 		await expect( page.locator( 'div.updated.inline' ) ).toContainText(
