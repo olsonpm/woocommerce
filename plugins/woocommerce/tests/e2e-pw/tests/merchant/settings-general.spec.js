@@ -1,6 +1,14 @@
 const { test, expect } = require( '@playwright/test' );
 const wcApi = require( '@woocommerce/woocommerce-rest-api' ).default;
 
+async function waitThreeSeconds() {
+	return new Promise( ( resolve ) => {
+		setTimeout( () => {
+			resolve( 'Done waiting for 3 seconds!' );
+		}, 3000 ); // 3000 milliseconds = 3 seconds
+	} );
+}
+
 test.describe( 'WooCommerce General Settings', () => {
 	test.use( { storageState: process.env.ADMINSTATE } );
 
@@ -51,6 +59,7 @@ test.describe( 'WooCommerce General Settings', () => {
 		await page
 			.locator( '#woocommerce_allowed_countries' )
 			.selectOption( 'all' );
+		waitThreeSeconds();
 		await page.locator( 'text=Save changes' ).click();
 
 		// confirm setting saved
