@@ -16,6 +16,28 @@ test.describe( 'WooCommerce General Settings', () => {
 		} );
 	} );
 
+	test( 'Save Changes button is disabled by default and enabled only after changes.', async ( {
+		page,
+	} ) => {
+		await page.goto( 'wp-admin/admin.php?page=wc-settings' );
+
+		// make sure the general tab is active
+		await expect( page.locator( 'a.nav-tab-active' ) ).toContainText(
+			'General'
+		);
+
+		// See the Save changes button is disabled.
+		await expect( page.locator( 'text=Save changes' ) ).toBeDisabled();
+
+		// Change the base location
+		await page
+			.locator( 'select[name="woocommerce_default_country"]' )
+			.selectOption( 'US:NC' );
+
+		// See the Save changes button is now enabled.
+		await expect( page.locator( 'text=Save changes' ) ).toBeEnabled();
+	} );
+
 	test( 'can update settings', async ( { page } ) => {
 		await page.goto( 'wp-admin/admin.php?page=wc-settings' );
 
