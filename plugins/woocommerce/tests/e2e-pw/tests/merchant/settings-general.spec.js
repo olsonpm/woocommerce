@@ -46,6 +46,11 @@ test.describe( 'WooCommerce General Settings', () => {
 			'General'
 		);
 
+		// Set selling location to something different so we can save.
+		await page
+			.locator( '#woocommerce_allowed_countries' )
+			.selectOption( 'all_except' );
+
 		// Set selling location to all countries first so we can
 		// choose California as base location.
 		await page
@@ -60,6 +65,11 @@ test.describe( 'WooCommerce General Settings', () => {
 		await expect(
 			page.locator( '#woocommerce_allowed_countries' )
 		).toHaveValue( 'all' );
+
+		// set the base location with state NC so we can save.
+		await page
+			.locator( 'select[name="woocommerce_default_country"]' )
+			.selectOption( 'US:NC' );
 
 		// set the base location with state CA.
 		await page
