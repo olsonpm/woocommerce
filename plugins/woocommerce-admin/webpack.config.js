@@ -77,6 +77,7 @@ const wpAdminScripts = [
 	'woo-plugin-update-connect-notice',
 	'woo-enable-autorenew',
 	'woo-renew-subscription',
+	'woo-inactive-subscription',
 ];
 const getEntryPoints = () => {
 	const entryPoints = {
