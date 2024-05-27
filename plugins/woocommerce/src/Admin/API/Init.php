@@ -57,8 +57,8 @@ class Init {
 	 * Init REST API.
 	 */
 	public function rest_api_init() {
-		$controllers              = array();
-		$analytics_controllers    = array();
+		$controllers           = array();
+		$analytics_controllers = array();
 
 		if ( wc_rest_should_load_namespace( 'wc-admin' ) ) {
 			// Controllers in the wc-admin namespace.
