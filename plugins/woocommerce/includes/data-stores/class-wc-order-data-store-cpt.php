@@ -893,28 +893,6 @@ class WC_Order_Data_Store_CPT extends Abstract_WC_Order_Data_Store_CPT implement
 	 */
 	protected function get_wp_query_args( $query_vars ) {
 
-		// Trigger doing_it_wrong() for query vars only supported in HPOS.
-		$hpos_only_query_vars   = array( 'meta_query', 'field_query' );
-		$unsupported_query_vars = array_keys( array_filter( array_intersect_key( $query_vars, array_flip( $hpos_only_query_vars ) ) ) );
-		if ( $unsupported_query_vars ) {
-			wc_doing_it_wrong(
-				__METHOD__,
-				esc_html(
-					sprintf(
-						// translators: %s is a comma separated list of query arguments.
-						_n(
-							'Order query argument (%s) is not supported on non-HPOS datastores.',
-							'Order query arguments (%s) are not supported on non-HPOS datastores.',
-							count( $unsupported_query_vars ),
-							'woocommerce'
-						),
-						implode( ', ', $unsupported_query_vars )
-					)
-				),
-				'9.0.0'
-			);
-		}
-
 		// Map query vars to ones that get_wp_query_args or WP_Query recognize.
 		$key_mapping = array(
 			'customer_id'    => 'customer_user',
@@ -1019,6 +997,28 @@ class WC_Order_Data_Store_CPT extends Abstract_WC_Order_Data_Store_CPT implement
 	 * @return array|object
 	 */
 	public function query( $query_vars ) {
+		// Trigger doing_it_wrong() for query vars only supported in HPOS.
+		$hpos_only_query_vars   = array( 'meta_query', 'field_query' );
+		$unsupported_query_vars = array_keys( array_filter( array_intersect_key( $query_vars, array_flip( $hpos_only_query_vars ) ) ) );
+		if ( $unsupported_query_vars && __CLASS__ === get_class( $this ) ) {
+			wc_doing_it_wrong(
+				__METHOD__,
+				esc_html(
+					sprintf(
+						// translators: %s is a comma separated list of query arguments.
+						_n(
+							'Order query argument (%s) is not supported on non-HPOS datastores.',
+							'Order query arguments (%s) are not supported on non-HPOS datastores.',
+							count( $unsupported_query_vars ),
+							'woocommerce'
+						),
+						implode( ', ', $unsupported_query_vars )
+					)
+				),
+				'9.0.0'
+			);
+		}
+
 		$args = $this->get_wp_query_args( $query_vars );
 
 		if ( ! empty( $args['errors'] ) ) {
