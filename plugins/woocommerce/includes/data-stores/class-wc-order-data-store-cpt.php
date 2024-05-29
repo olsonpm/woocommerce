@@ -1015,7 +1015,7 @@ class WC_Order_Data_Store_CPT extends Abstract_WC_Order_Data_Store_CPT implement
 						implode( ', ', $unsupported_query_vars )
 					)
 				),
-				'9.0.0'
+				'9.1.0'
 			);
 		}
 
