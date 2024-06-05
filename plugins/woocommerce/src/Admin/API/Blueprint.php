@@ -1,10 +1,10 @@
 <?php
 
-
-
 namespace Automattic\WooCommerce\Admin\API;
 
-use Automattic\WooCommerce\Admin\Features\QuickConfig\QuickConfigService;
+use Automattic\WooCommerce\Admin\Features\Blueprint\ImportSchema;
+use Automattic\WooCommerce\Admin\Features\Blueprint\JsonResultFormatter;
+use Automattic\WooCommerce\Admin\Features\Blueprint\SettingsExporter;
 
 class Blueprint {
 	/**
@@ -45,27 +45,19 @@ class Blueprint {
 	public function process() {
 		if ( !empty($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK ) {
 			$uploaded_file = $_FILES['file']['tmp_name'];
-        	$file_content = file_get_contents( $uploaded_file );
-
-			$data = json_decode( $file_content );
-
-			wplog($data);
-
-
-			if ( json_last_error() !== JSON_ERROR_NONE ) {
-				return new \WP_REST_Response(array(
-					'status' => 'error',
-					'message' => 'Invalid JSON data',
-				), 400);
+			if ($_FILES['file']['type'] === 'application/zip') {
+				$blueprint = ImportSchema::crate_from_zip($uploaded_file);
+			} else {
+				$blueprint = ImportSchema::create_from_json($uploaded_file);
 			}
+			$results = $blueprint->process();
+			$result_formatter = new JsonResultFormatter($results);
 
-			$blueprint = new \Automattic\WooCommerce\Admin\Features\Blueprint\Blueprint( $data );
-			$paul = $blueprint->process();
 
 			return new \WP_HTTP_Response( array(
 				'status' => 'success',
 				'message' => 'Data processed successfully',
-				'data' => $paul,
+				'data' => $result_formatter->format(),
 			), 200 );
 		}
 

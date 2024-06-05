@@ -1,31 +1,16 @@
 <?php
 
-namespace Automattic\WooCommerce\Admin\Features\Blueprint\StepProcessors\Settings;
+namespace Automattic\WooCommerce\Admin\Features\Blueprint\StepProcessors;
 
 use Automattic\WooCommerce\Admin\Features\Blueprint\StepProcessor;
 use Automattic\WooCommerce\Admin\Features\Blueprint\StepProcessorResult;
 use WC_Tax;
 
-class ConfigureSettingsTax extends MapFieldsToOptions implements StepProcessor {
-	protected array $options_map = array(
-		"prices_entered_with_tax"=> "woocommerce_prices_include_tax",
-		"calculate_tax_based_on"=> "woocommerce_tax_based_on",
-		"shipping_tax_class"=> "woocommerce_shipping_tax_class",
-		"round_at_subtotal_level"=> "woocommerce_tax_round_at_subtotal",
-		"additional_tax_classes"=> "woocommerce_tax_classes",
-		"display_prices_in_the_shop"=> "woocommerce_tax_display_shop",
-		"display_prices_during_cart_and_checkout"=> "woocommerce_tax_display_cart",
-		"price_display_suffix"=> "woocommerce_price_display_suffix",
-		"display_tax_totals"=> "woocommerce_tax_total_display",
-	);
-
+class ConfigureTaxRates implements StepProcessor {
 	public function process($schema): StepProcessorResult {
-		$result = parent::process($schema);
-
-		if ( isset($schema->rates)) {
-			foreach ($schema->rates as $rate ) {
-				$this->add_rate($rate);
-			}
+		$result = StepProcessorResult::success('ConfigureTaxRaes');
+		foreach ($schema->rates as $rate ) {
+			$this->add_rate($rate);
 		}
 
 		return $result;
@@ -60,5 +45,9 @@ class ConfigureSettingsTax extends MapFieldsToOptions implements StepProcessor {
 		}
 
 		return $tax_rate_id;
+	}
+
+	public function get_supported_step(): string {
+		return 'configureTaxRates';
 	}
 }

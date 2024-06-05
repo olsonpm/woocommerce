@@ -4,6 +4,7 @@
 import { __ } from '@wordpress/i18n';
 import { Button } from '@wordpress/components';
 import { useState } from '@wordpress/element';
+import { getAdminLink } from '@woocommerce/settings';
 
 /**
  * Internal dependencies
@@ -13,7 +14,7 @@ import { IntroOptInEvent } from '../index';
 
 export const BuilderIntro = ( {
 	sendEvent,
-	navigationProgress,
+	navigationProgress = 80,
 }: {
 	sendEvent: ( event: IntroOptInEvent ) => void;
 	navigationProgress: number;
@@ -41,7 +42,14 @@ export const BuilderIntro = ( {
 			.then( ( response ) => response.json() )
 			.then( ( data ) => {
 				if ( data.status === 'success' ) {
-					setMessage( 'File uploaded successfully.' );
+					setMessage(
+						'File uploaded successfully. Redirecting to Woo Home.'
+					);
+					window.setTimeout( () => {
+						window.location.href = getAdminLink(
+							'admin.php?page=wc-admin'
+						);
+					}, 1000 );
 				} else {
 					setMessage( `Error: ${ data.message }` );
 				}
@@ -76,7 +84,7 @@ export const BuilderIntro = ( {
 					onChange={ handleFileChange }
 				/>
 				<Button variant="primary" onClick={ handleUpload }>
-					{ __( 'Upload Blueprint' ) }
+					{ __( 'Upload Blueprint', 'woocommerce' ) }
 				</Button>
 				<div>{ message }</div>
 			</div>

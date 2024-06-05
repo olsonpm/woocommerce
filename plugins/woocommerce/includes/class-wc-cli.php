@@ -33,6 +33,7 @@ class WC_CLI {
 		require_once dirname( __FILE__ ) . '/cli/class-wc-cli-tracker-command.php';
 		require_once dirname( __FILE__ ) . '/cli/class-wc-cli-com-command.php';
 		require_once dirname( __FILE__ ) . '/cli/class-wc-cli-com-extension-command.php';
+		require_once dirname( WC_PLUGIN_FILE ) . '/src/Admin/Features/Blueprint/Cli.php';
 	}
 
 	/**
@@ -47,6 +48,8 @@ class WC_CLI {
 		WP_CLI::add_hook( 'after_wp_load', 'WC_CLI_COM_Extension_Command::register_commands' );
 		$cli_runner = wc_get_container()->get( CLIRunner::class );
 		WP_CLI::add_hook( 'after_wp_load', array( $cli_runner, 'register_commands' ) );
+		WP_CLI::add_hook( 'after_wp_load', 'Automattic\WooCommerce\Admin\Features\Blueprint\Cli::register_commands' );
+
 	}
 }
 
