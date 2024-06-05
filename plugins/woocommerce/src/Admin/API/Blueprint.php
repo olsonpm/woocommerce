@@ -49,6 +49,9 @@ class Blueprint {
 
 			$data = json_decode( $file_content );
 
+			wplog($data);
+
+
 			if ( json_last_error() !== JSON_ERROR_NONE ) {
 				return new \WP_REST_Response(array(
 					'status' => 'error',
@@ -58,7 +61,7 @@ class Blueprint {
 
 			$blueprint = new \Automattic\WooCommerce\Admin\Features\Blueprint\Blueprint( $data );
 			$paul = $blueprint->process();
-			
+
 			return new \WP_HTTP_Response( array(
 				'status' => 'success',
 				'message' => 'Data processed successfully',

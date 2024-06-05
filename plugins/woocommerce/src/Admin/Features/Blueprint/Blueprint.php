@@ -21,9 +21,7 @@ class Blueprint {
 		 * @var StepProcessorResult[]
 		 */
 		$results = array();
-
-		$schema = json_decode( file_get_contents( $this->schemaPath ) );
-		foreach ( $schema->steps as $stepSchema ) {
+		foreach ( $this->schema->steps as $stepSchema ) {
 			$stepProcessor = __NAMESPACE__ . '\\StepProcessors\\' . ucfirst( $stepSchema->step );
 			if ( class_exists( $stepProcessor ) ) {
 				/**
