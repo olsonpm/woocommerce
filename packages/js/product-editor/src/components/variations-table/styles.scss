@@ -204,4 +204,10 @@
 		width: 32px;
 		max-height: 32px;
 	}
+
+	&__stock-status-actions-menu {
+		.components-popover__content {
+			padding: 0;
+		}
+	}
 }

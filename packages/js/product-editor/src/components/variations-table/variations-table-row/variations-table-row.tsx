@@ -143,6 +143,7 @@ export function VariationsTableRow( {
 
 		return (
 			<Dropdown
+				contentClassName="woocommerce-product-variations__stock-status-actions-menu"
 				// @ts-expect-error missing prop in types.
 				popoverProps={ {
 					placement: 'bottom',
