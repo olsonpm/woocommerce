@@ -2,6 +2,7 @@
 
 namespace Automattic\WooCommerce\Admin\API;
 
+use Automattic\WooCommerce\Admin\Features\Blueprint\ExportSchema;
 use Automattic\WooCommerce\Admin\Features\Blueprint\ImportSchema;
 use Automattic\WooCommerce\Admin\Features\Blueprint\JsonResultFormatter;
 use Automattic\WooCommerce\Admin\Features\Blueprint\SettingsExporter;
@@ -40,6 +41,27 @@ class Blueprint {
 				),
 			)
 		);
+
+		register_rest_route(
+			$this->namespace,
+			'/export',
+			array(
+				array(
+					'methods'             => \WP_REST_Server::READABLE,
+					'callback'            => array( $this, 'export' ),
+					'permission_callback' => function () {
+						return true;
+					},
+				),
+			)
+		);
+	}
+
+	public function export() {
+		$exporter = new ExportSchema();
+		return new \WP_HTTP_Response(array(
+			'schema' => $exporter->export()
+		));
 	}
 
 	public function process() {

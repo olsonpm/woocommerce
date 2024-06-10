@@ -22,6 +22,7 @@ import { possiblyRenderSettingsSlots } from './settings/settings-slots';
 import { registerTaxSettingsConflictErrorFill } from './settings/conflict-error-slotfill';
 import { registerPaymentsSettingsBannerFill } from './payments/payments-settings-banner-slotfill';
 import { registerSiteVisibilitySlotFill } from './launch-your-store';
+import { registerBlueprintSlotfill } from './blueprint';
 
 const appRoot = document.getElementById( 'root' );
 const embeddedRoot = document.getElementById( 'woocommerce-embedded-root' );
@@ -95,6 +96,8 @@ if ( appRoot ) {
 	) {
 		registerSiteVisibilitySlotFill();
 	}
+
+	registerBlueprintSlotfill();
 }
 
 // Set up customer effort score survey.
