@@ -10,7 +10,7 @@ class ExportPaymentGateways implements ExportsStepSchema {
 			$payment_gateways[$id] = array(
 				'title'	=> $payment_gateway->get_title(),
 				'description' => $payment_gateway->get_description(),
-				'enabled' => $payment_gateway->is_available(),
+				'enabled' => $payment_gateway->is_available() ? 'yes' : 'no',
 			);
 		}
 

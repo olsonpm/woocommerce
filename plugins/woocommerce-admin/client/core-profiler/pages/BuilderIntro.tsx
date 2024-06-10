@@ -43,15 +43,16 @@ export const BuilderIntro = ( {
 			.then( ( data ) => {
 				if ( data.status === 'success' ) {
 					setMessage(
-						'File uploaded successfully. Redirecting to Woo Home.'
+						'File uploaded successfully. Redirecting to' +
+							data.data.redirect
 					);
+
 					window.setTimeout( () => {
-						window.location.href = getAdminLink(
-							'admin.php?page=wc-admin'
-						);
-					}, 1000 );
+						window.location.href = data.data.redirect;
+					}, 3000 );
 				} else {
-					setMessage( `Error: ${ data.message }` );
+					setMessage( JSON.stringify( data.data.result, null, 2 ) );
+					// setMessage( `Error: ${ data.message }` );
 				}
 			} )
 			.catch( ( error ) => {
@@ -86,7 +87,9 @@ export const BuilderIntro = ( {
 				<Button variant="primary" onClick={ handleUpload }>
 					{ __( 'Upload Blueprint', 'woocommerce' ) }
 				</Button>
-				<div>{ message }</div>
+				<div>
+					<pre>{ message }</pre>
+				</div>
 			</div>
 		</>
 	);

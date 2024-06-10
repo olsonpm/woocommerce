@@ -18,6 +18,8 @@ class ConfigurePaymentGateways implements StepProcessor {
 
 			$payment_gateway = $payment_gateways[$id];
 
+			// @todo when enabling, we need to check if the payment gateways needs setup
+			// refer to https://github.com/woocommerce/woocommerce/blob/trunk/plugins/woocommerce/includes/class-wc-ajax.php#L3564
 			foreach ($fields as $field) {
 				if (isset($payment_gateway_data->{$field})) {
 					$payment_gateway->update_option($field, $payment_gateway_data->{$field});

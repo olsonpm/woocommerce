@@ -45,19 +45,34 @@ class Blueprint {
 	public function process() {
 		if ( !empty($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK ) {
 			$uploaded_file = $_FILES['file']['tmp_name'];
-			if ($_FILES['file']['type'] === 'application/zip') {
-				$blueprint = ImportSchema::crate_from_zip($uploaded_file);
-			} else {
-				$blueprint = ImportSchema::create_from_json($uploaded_file);
+
+			try {
+				if ( $_FILES['file']['type'] === 'application/zip' ) {
+					$blueprint = ImportSchema::crate_from_zip( $uploaded_file );
+				} else {
+					$blueprint = ImportSchema::create_from_json( $uploaded_file );
+				}
+			} catch(\InvalidArgumentException $e) {
+				return new \WP_REST_Response(array(
+					'status' => 'error',
+					'message' => $e->getMessage(),
+				), 400);
 			}
+
 			$results = $blueprint->process();
 			$result_formatter = new JsonResultFormatter($results);
+			$redirect = $blueprint->get_schema()->get_step('redirectToAfter');
+			$redirect_url = $redirect->url ?? 'admin.php?page=wc-admin';
 
+			$is_success = $result_formatter->is_success() ? 'success' : 'error';
 
 			return new \WP_HTTP_Response( array(
-				'status' => 'success',
-				'message' => 'Data processed successfully',
-				'data' => $result_formatter->format(),
+				'status' => $is_success,
+				'message' => $is_success === 'error' ? __('There was an error while processing your schema', 'woocommerce') : 'success',
+				'data' => array(
+					'redirect' => admin_url($redirect_url),
+					'result' => $result_formatter->format(),
+				),
 			), 200 );
 		}
 

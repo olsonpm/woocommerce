@@ -3,6 +3,7 @@
 namespace Automattic\WooCommerce\Admin\Features\Blueprint;
 
 use Automattic\WooCommerce\Admin\Features\Blueprint\Exporters\ExportCoreProfilerSettings;
+use Automattic\WooCommerce\Admin\Features\Blueprint\Exporters\ExportRedirectToAfter;
 use Automattic\WooCommerce\Admin\Features\Blueprint\Exporters\ExportPaymentGateways;
 use Automattic\WooCommerce\Admin\Features\Blueprint\Exporters\ExportPluginList;
 use Automattic\WooCommerce\Admin\Features\Blueprint\Exporters\ExportSettings;
@@ -21,6 +22,7 @@ class ExportSchema {
 		ExportShipping::class,
 		ExportSettings::class,
 		ExportPaymentGateways::class,
+		ExportRedirectToAfter::class,
 	);
 
 	protected array $exporters = array();

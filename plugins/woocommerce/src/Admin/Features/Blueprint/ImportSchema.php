@@ -22,6 +22,10 @@ class ImportSchema {
 		$this->step_factory = $step_factory;
 	}
 
+	public function get_schema() {
+		return $this->schema;
+	}
+
 	public static function crate_from_file($file) {
 		// @todo check for mime type
 		// @todo check for allowed types -- json or zip
@@ -44,7 +48,7 @@ class ImportSchema {
 	 */
 	public function process() {
 		$results = array();
-		$result = StepProcessorResult::success(self::class);
+		$result = StepProcessorResult::success('ImportSchema');
 		$results[] = $result;
 
 		$this->apply_filters('woooblueprint_importers', function(StepProcessor $step_processor) {
