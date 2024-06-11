@@ -290,6 +290,10 @@ class WC_REST_Orders_Controller extends WC_REST_Orders_V2_Controller {
 			'context'     => array( 'edit' ),
 		);
 
+		$schema['_doc'] = [
+			'foo' => 'bar'
+		];
+
 		return $schema;
 	}
 

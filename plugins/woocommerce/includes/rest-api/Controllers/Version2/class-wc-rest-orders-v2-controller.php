@@ -90,7 +90,7 @@ class WC_REST_Orders_V2_Controller extends WC_REST_CRUD_Controller {
 				'args'   => array(
 					'id' => array(
 						'description' => __( 'Unique identifier for the resource.', 'woocommerce' ),
-						'type'        => 'integer',
+						'type'        => 'integer'
 					),
 				),
 				array(
@@ -120,6 +120,7 @@ class WC_REST_Orders_V2_Controller extends WC_REST_CRUD_Controller {
 					),
 				),
 				'schema' => array( $this, 'get_public_item_schema' ),
+				'__doc' => ['a' => 'b']
 			)
 		);
 
