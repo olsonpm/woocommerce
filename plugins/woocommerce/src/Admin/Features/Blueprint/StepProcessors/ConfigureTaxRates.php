@@ -7,30 +7,38 @@ use Automattic\WooCommerce\Admin\Features\Blueprint\StepProcessorResult;
 use WC_Tax;
 
 class ConfigureTaxRates implements StepProcessor {
+	private StepProcessorResult $result;
 	public function process($schema): StepProcessorResult {
-		$result = StepProcessorResult::success('ConfigureTaxRaes');
+		$this->result = StepProcessorResult::success('ConfigureTaxRaes');
 		foreach ($schema->rates as $rate ) {
 			$this->add_rate($rate);
 		}
 
-		return $result;
+		return $this->result;
+	}
+
+	protected function exist($id) {
+		global $wpdb;
+		return $wpdb->get_row(
+			$wpdb->prepare(
+				"
+					SELECT *
+					FROM {$wpdb->prefix}woocommerce_tax_rates
+					WHERE tax_rate_id = %d
+				",
+				$id
+			),
+			ARRAY_A
+		);
 	}
 
 	protected function add_rate($rate) {
-		$tax_rate = array_intersect_key(
-			(array) $rate,
-			array(
-				'tax_rate_country'  => 1,
-				'tax_rate_state'    => 1,
-				'tax_rate'          => 1,
-				'tax_rate_name'     => 1,
-				'tax_rate_priority' => 1,
-				'tax_rate_compound' => 1,
-				'tax_rate_shipping' => 1,
-				'tax_rate_order'    => 1,
-				'tax_rate_class'    => 1
-			)
-		);
+		$tax_rate = (array) $rate;
+
+		if ($this->exist($tax_rate['tax_rate_id'])) {
+			$this->result->add_info("Tax rate with I.D {$tax_rate['tax_rate_id']} already exist. Skipped creating it.'");
+			return false;
+		}
 
 		$tax_rate_id = WC_Tax::_insert_tax_rate( $tax_rate );
 
