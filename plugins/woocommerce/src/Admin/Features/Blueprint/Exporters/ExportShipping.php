@@ -20,11 +20,15 @@ class ExportShipping implements ExportsStepSchema {
 
 		$term_ids = implode(", ", $term_ids);
 
-		$terms = $wpdb->get_results("
+		if (!empty($term_ids)) {
+			$terms = $wpdb->get_results( "
 			SELECT *
 			from {$wpdb->prefix}terms
 			where term_id in ($term_ids)
-		");
+		" );
+		} else {
+			$terms = array();
+		}
 
 		$settings['classes'] = $classes;
 		$settings['terms'] = $terms;

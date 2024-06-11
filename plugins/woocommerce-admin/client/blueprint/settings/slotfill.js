@@ -84,6 +84,24 @@ const Blueprint = () => {
 			<p className="blueprint-settings-slotfill-description">
 				{ __( 'Import/Export your Blueprint schema.', 'woocommerce' ) }
 			</p>
+			<Button
+				isLink
+				onClick={ () => {
+					setCheckedState( ( prevState ) => {
+						const newState = {};
+						Object.entries( prevState ).forEach(
+							( [ key, value ] ) => {
+								newState[ key ] = ! value;
+							}
+						);
+						return newState;
+					} );
+				} }
+			>
+				Toggle selections
+			</Button>
+			<br />
+			<br />
 			{ Object.entries( steps ).map( ( [ key, value ] ) => (
 				<div key={ key }>
 					<input
