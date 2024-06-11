@@ -6,6 +6,7 @@ class ExportPaymentGateways implements ExportsStepSchema {
 
 	public function export() {
 		$payment_gateways = array();
+		$this->maybe_hide_wcpay_gateways();
 		foreach (WC()->payment_gateways->payment_gateways() as $id => $payment_gateway) {
 			$payment_gateways[$id] = array(
 				'title'	=> $payment_gateway->get_title(),
@@ -26,5 +27,9 @@ class ExportPaymentGateways implements ExportsStepSchema {
 
 	public function get_step_name() {
 		return 'configurePaymentGateways';
+	}
+
+	protected function maybe_hide_wcpay_gateways() {
+		\WC_Payments::hide_gateways_on_settings_page();
 	}
 }
