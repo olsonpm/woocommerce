@@ -49,7 +49,7 @@ export const BuilderIntro = ( {
 
 					window.setTimeout( () => {
 						window.location.href = data.data.redirect;
-					}, 3000 );
+					}, 2000 );
 				} else {
 					setMessage( JSON.stringify( data.data.result, null, 2 ) );
 					// setMessage( `Error: ${ data.message }` );

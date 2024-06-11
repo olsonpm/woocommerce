@@ -9,6 +9,7 @@ use Automattic\WooCommerce\Admin\Features\Blueprint\Exporters\ExportPluginList;
 use Automattic\WooCommerce\Admin\Features\Blueprint\Exporters\ExportSettings;
 use Automattic\WooCommerce\Admin\Features\Blueprint\Exporters\ExportShipping;
 use Automattic\WooCommerce\Admin\Features\Blueprint\Exporters\ExportsStepSchema;
+use Automattic\WooCommerce\Admin\Features\Blueprint\Exporters\ExportTaskOptions;
 use Automattic\WooCommerce\Admin\Features\Blueprint\Exporters\ExportTaxRates;
 use Automattic\WooCommerce\Admin\Features\Blueprint\Exporters\ExportThemeList;
 
@@ -23,6 +24,7 @@ class ExportSchema {
 		ExportSettings::class,
 		ExportPaymentGateways::class,
 		ExportRedirectToAfter::class,
+		ExportTaskOptions::class,
 	);
 
 	protected array $exporters = array();
