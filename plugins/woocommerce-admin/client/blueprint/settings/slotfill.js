@@ -1,12 +1,8 @@
 /**
  * External dependencies
  */
-import {
-	createSlotFill,
-	ToggleControl,
-	RadioControl,
-	Button,
-} from '@wordpress/components';
+import { createSlotFill, Button } from '@wordpress/components';
+import { getAdminLink } from '@woocommerce/settings';
 
 import apiFetch from '@wordpress/api-fetch';
 
@@ -24,11 +20,34 @@ const { Fill } = createSlotFill( SETTINGS_SLOT_FILL_CONSTANT );
 
 const Blueprint = () => {
 	const [ exportEnabled, setExportEnabled ] = useState( true );
-	const exportBlueprint = async () => {
+	const steps = {
+		Settings: 'configureSettings',
+		'Core Profiler Settings': 'configureCoreProfiler',
+		'Payment Gateways': 'configurePaymentGateways',
+		Shipping: 'configureShipping',
+		'Tax rates': 'configureTaxRates',
+		Plugins: 'installPlugins',
+		Themes: 'installThemes',
+		'Task Options': 'configureTaskOptions',
+	};
+
+	// Initialize state to keep track of checkbox values
+	const [ checkedState, setCheckedState ] = useState(
+		Object.keys( steps ).reduce( ( acc, key ) => {
+			acc[ key ] = true;
+			return acc;
+		}, {} )
+	);
+
+	const exportBlueprint = async ( _steps ) => {
 		setExportEnabled( false );
+
 		const response = await apiFetch( {
-			path: `/blueprint/export`,
-			method: 'GET',
+			path: '/blueprint/export',
+			method: 'POST',
+			data: {
+				steps: _steps,
+			},
 		} );
 
 		// Create a link element and trigger the download
@@ -44,6 +63,14 @@ const Blueprint = () => {
 		setExportEnabled( true );
 	};
 
+	// Handle checkbox change
+	const handleOnChange = ( key ) => {
+		setCheckedState( ( prevState ) => ( {
+			...prevState,
+			[ key ]: ! prevState[ key ],
+		} ) );
+	};
+
 	useEffect( () => {
 		const saveButton = document.getElementsByClassName(
 			'woocommerce-save-button'
@@ -54,14 +81,38 @@ const Blueprint = () => {
 	} );
 	return (
 		<div className="blueprint-settings-slotfill">
-			<h2>{ __( 'Blueprint', 'woocommerce' ) }</h2>
 			<p className="blueprint-settings-slotfill-description">
 				{ __( 'Import/Export your Blueprint schema.', 'woocommerce' ) }
+			</p>
+			{ Object.entries( steps ).map( ( [ key, value ] ) => (
+				<div key={ key }>
+					<input
+						type="checkbox"
+						id={ key }
+						name={ key }
+						value={ value }
+						checked={ checkedState[ key ] }
+						onChange={ () => handleOnChange( key ) }
+					/>
+					<label htmlFor={ key }>{ key }</label>
+				</div>
+			) ) }
+			<br />
+			<p>
+				Export can take a few seconds depending on your network speed.
 			</p>
 			<Button
 				isPrimary
 				onClick={ () => {
-					exportBlueprint();
+					const selectedSteps = [];
+					Object.entries( checkedState ).forEach(
+						( [ key, value ] ) => {
+							if ( value ) {
+								selectedSteps.push( steps[ key ] );
+							}
+						}
+					);
+					exportBlueprint( selectedSteps );
 				} }
 				disabled={ ! exportEnabled }
 				isBusy={ ! exportEnabled }
@@ -69,8 +120,21 @@ const Blueprint = () => {
 				{ __( 'Export', 'woocommerce' ) }
 			</Button>
 			<p>
-				Export can take a few seconds depending on your network speed.
+				You can import the schema on the{ ' ' }
+				<a
+					href={ getAdminLink(
+						'admin.php?page=wc-admin&path=%2Fsetup-wizard&step=intro-builder'
+					) }
+				>
+					builder setup page
+				</a>{ ' ' }
+				or use the import WP CLI command.
 			</p>
+			<h3>WP CLI Commands</h3>
+			<b>Import:</b>{ ' ' }
+			<code>wp wc blueprint import path-to-woo-blueprint.json</code>
+			<br /> <br />
+			<b>Export:</b> <code>wp wc blueprint export save-to-path.json</code>
 		</div>
 	);
 };

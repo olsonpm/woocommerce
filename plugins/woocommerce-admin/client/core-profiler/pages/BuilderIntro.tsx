@@ -4,7 +4,6 @@
 import { __ } from '@wordpress/i18n';
 import { Button } from '@wordpress/components';
 import { useState } from '@wordpress/element';
-import { getAdminLink } from '@woocommerce/settings';
 
 /**
  * Internal dependencies
@@ -43,7 +42,7 @@ export const BuilderIntro = ( {
 			.then( ( data ) => {
 				if ( data.status === 'success' ) {
 					setMessage(
-						'File uploaded successfully. Redirecting to' +
+						'File uploaded successfully. Redirecting to ' +
 							data.data.redirect
 					);
 

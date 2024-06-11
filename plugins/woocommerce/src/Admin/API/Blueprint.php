@@ -47,20 +47,39 @@ class Blueprint {
 			'/export',
 			array(
 				array(
-					'methods'             => \WP_REST_Server::READABLE,
+					'methods'             => \WP_REST_Server::CREATABLE,
 					'callback'            => array( $this, 'export' ),
 					'permission_callback' => function () {
 						return true;
 					},
+					'args'                => array(
+						'steps' => array(
+							'description'       => 'A list of plugins to install',
+							'type'              => 'array',
+							'items'             => 'string',
+							'default'           => array(),
+							'sanitize_callback' => function ( $value ) {
+								return array_map(
+									function ( $value ) {
+										return sanitize_text_field( $value );
+									},
+									$value
+								);
+							},
+							'required'          => false,
+						),
+					),
 				),
 			)
 		);
 	}
 
-	public function export() {
+	public function export($request) {
+		$steps = $request->get_param('steps', array());
+
 		$exporter = new ExportSchema();
 		return new \WP_HTTP_Response(array(
-			'schema' => $exporter->export()
+			'schema' => $exporter->export($steps)
 		));
 	}
 
