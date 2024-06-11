@@ -598,6 +598,14 @@ class Loader {
 	}
 
 	public static function maybe_configure_with_blueprint() {
+		if (!defined('WOO_BLUEPRINT_PATH') ) {
+			return;
+		}
+
+		if (!defined('USE_WOO_BLUEPRINT')) {
+			return;
+		}
+
 		$path = constant( 'WOO_BLUEPRINT_PATH' );
 		if ( true === constant( 'USE_WOO_BLUEPRINT' ) && file_exists( $path )) {
 			$blueprint = ImportSchema::crate_from_file($path);
