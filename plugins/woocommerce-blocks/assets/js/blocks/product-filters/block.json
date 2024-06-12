@@ -10,7 +10,18 @@
 	"supports": {
 		"align": true,
 		"multiple": false,
-		"interactivity": true
+		"interactivity": true,
+		"layout": {
+			"default": {
+				"type": "flex",
+				"orientation": "vertical",
+				"justifyContent": "stretch"
+			},
+			"allowInheriting": false
+		},
+		"spacing": {
+			"blockGap": true
+		}
 	},
 	"textdomain": "woocommerce",
 	"usesContext": [ "postId" ],
