@@ -8,7 +8,7 @@ class ExportThemeList implements ExportsStepSchema {
 			require_once ABSPATH . 'wp-includes/theme.php';
 		}
 		if ( ! function_exists( 'themes_api' ) ) {
-			include_once ABSPATH . 'wp-admin/includes/theme.php';
+			require_once ABSPATH . 'wp-admin/includes/theme.php';
 		}
 		$export       = array();
 		$thmes        = wp_get_themes();

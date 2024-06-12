@@ -13,7 +13,7 @@ class ExportPluginList implements ExportsStepSchema {
 		}
 
 		if ( ! function_exists( 'plugins_api' ) ) {
-			include_once ABSPATH . '/wp-admin/includes/plugin-install.php';
+			require_once ABSPATH . '/wp-admin/includes/plugin-install.php';
 		}
 		$export = array();
 		$plugins = get_plugins();

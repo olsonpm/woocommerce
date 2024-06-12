@@ -25,7 +25,7 @@ class InstallPlugins implements StepProcessor {
 				continue;
 			}
 			if ($this->storage->is_supported_resource($plugin->resource) === false ) {
-				$result->add_error("Invalid resource type for {$plugin->slug}");
+				$result->add_error("Invalid resource type for {$plugin->slug}.");
 				continue;
 			}
 
