@@ -33,6 +33,13 @@ class ExportSchema {
 	    $this->exporters[$exporter->get_step_name()] = $exporter;
 	}
 
+	public function get_exporter($step) {
+		if (isset($this->exporters[$step])) {
+			return $this->exporters[$step];
+		}
+		return null;
+ 	}
+
 	public function __construct($exporters = array()) {
 	    if (count($exporters) === 0) {
 			$this->add_default_exporters();

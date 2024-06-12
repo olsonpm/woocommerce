@@ -34,14 +34,20 @@ class Cli {
 		));
 
 		\WP_CLI::add_command( 'wc blueprint export', function($args, $assoc_args) {
-			$import = new ExportCli($args[0]);
+			$export = new ExportCli($args[0]);
 			$steps = array();
+			$format = $assoc_args['format'] ?? 'json';
+
+
 			if (isset($assoc_args['steps'])) {
 				$steps = array_map(function($step) {
 					return trim($step);
 				}, explode(',', $assoc_args['steps']));
 			}
-			$import->run($steps);
+			$export->run(array(
+				'steps'=>$steps,
+				'format' => $format
+			));
 		}, array(
 			'synopsis' => [
 				[
@@ -53,6 +59,13 @@ class Cli {
 					'type' => 'assoc',
 					'name' => 'steps',
 					'optional' => true,
+				],
+				[
+					'type' => 'assoc',
+					'name' => 'format',
+					'optional' => true,
+					'default' => 'json',
+					'options' => ['json', 'zip'],
 				],
 			],
 			'when' => 'after_wp_load',

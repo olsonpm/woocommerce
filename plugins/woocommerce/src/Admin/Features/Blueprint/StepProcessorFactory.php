@@ -59,7 +59,7 @@ class StepProcessorFactory {
 		$storage = new ResourceStorage();
 		$storage->add_downloader(new OrgPluginResourceDownloader());
 
-		if ($this->schema instanceof ZipSchema) {
+		if ( $this->schema instanceof ZipExportedSchema) {
 			$storage->add_downloader( new LocalPluginResourceDownloader($this->schema->get_unzip_path()) );
 		}
 
@@ -69,7 +69,7 @@ class StepProcessorFactory {
 	private function create_install_themes_processor() {
 		$storage = new ResourceStorage();
 		$storage->add_downloader(new OrgThemeResourceDownloader());
-		if ($this->schema instanceof ZipSchema) {
+		if ( $this->schema instanceof ZipExportedSchema) {
 			$storage->add_downloader( new LocalThemeResourceDownloader($this->schema->get_unzip_path()) );
 		}
 
