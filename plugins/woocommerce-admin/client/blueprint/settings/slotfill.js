@@ -20,6 +20,7 @@ const { Fill } = createSlotFill( SETTINGS_SLOT_FILL_CONSTANT );
 
 const Blueprint = () => {
 	const [ exportEnabled, setExportEnabled ] = useState( true );
+	const [ exportAsZip, setExportAsZip ] = useState( false );
 	const steps = {
 		Settings: 'configureSettings',
 		'Core Profiler Settings': 'configureCoreProfiler',
@@ -47,16 +48,24 @@ const Blueprint = () => {
 			method: 'POST',
 			data: {
 				steps: _steps,
+				export_as_zip: exportAsZip,
 			},
 		} );
 
-		// Create a link element and trigger the download
-		const url = window.URL.createObjectURL(
-			new Blob( [ JSON.stringify( response.schema, null, 2 ) ] )
-		);
 		const link = document.createElement( 'a' );
-		link.href = url;
-		link.setAttribute( 'download', 'woo-blueprint.json' );
+
+		if ( response.type === 'zip' ) {
+			link.href = response.data;
+			link.target = '_blank';
+		} else {
+			// Create a link element and trigger the download
+			const url = window.URL.createObjectURL(
+				new Blob( [ JSON.stringify( response.data, null, 2 ) ] )
+			);
+			link.href = url;
+			link.setAttribute( 'download', 'woo-blueprint.json' );
+		}
+
 		document.body.appendChild( link );
 		link.click();
 		document.body.removeChild( link );
@@ -137,6 +146,19 @@ const Blueprint = () => {
 			>
 				{ __( 'Export', 'woocommerce' ) }
 			</Button>
+			<div>
+				<input
+					type="checkbox"
+					id="export-as-zip"
+					name={ 'export-as-zip' }
+					value={ 'yes' }
+					checked={ exportAsZip }
+					onChange={ () => {
+						setExportAsZip( ! exportAsZip );
+					} }
+				/>
+				<label htmlFor="export-as-zip">Export as a zip</label>
+			</div>
 			<p>
 				You can import the schema on the{ ' ' }
 				<a

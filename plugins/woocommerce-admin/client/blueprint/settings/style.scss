@@ -3,6 +3,9 @@
 		cursor: pointer;
 	}
 
+	button.is-primary {
+		margin-bottom: 7px;
+	}
 	button.is-link {
 		text-decoration: none;
 		&:active, &:focus {

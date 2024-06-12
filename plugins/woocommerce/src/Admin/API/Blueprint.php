@@ -6,6 +6,7 @@ use Automattic\WooCommerce\Admin\Features\Blueprint\ExportSchema;
 use Automattic\WooCommerce\Admin\Features\Blueprint\ImportSchema;
 use Automattic\WooCommerce\Admin\Features\Blueprint\JsonResultFormatter;
 use Automattic\WooCommerce\Admin\Features\Blueprint\SettingsExporter;
+use Automattic\WooCommerce\Admin\Features\Blueprint\ZipExportedSchema;
 
 class Blueprint {
 	/**
@@ -68,6 +69,12 @@ class Blueprint {
 							},
 							'required'          => false,
 						),
+						'export_as_zip' => array(
+							'description'       => 'Export as a zip file',
+							'type'              => 'boolean',
+							'default'           => false,
+							'required'          => false,
+						),
 					),
 				),
 			)
@@ -76,10 +83,25 @@ class Blueprint {
 
 	public function export($request) {
 		$steps = $request->get_param('steps', array());
-
+		$export_as_zip = $request->get_param('export_as_zip', false);
 		$exporter = new ExportSchema();
+
+		if ($export_as_zip) {
+			$exporter->get_exporter('installPlugins')->include_private_plugins(true);
+		}
+
+
+		$data = $exporter->export($steps);
+
+		if ($export_as_zip) {
+			$zip = new ZipExportedSchema($data);
+			$data = $zip->zip();
+			$data = site_url(str_replace(ABSPATH, '', $data));
+		}
+
 		return new \WP_HTTP_Response(array(
-			'schema' => $exporter->export($steps)
+			'data' => $data,
+			'type' => $export_as_zip ? 'zip' : 'json',
 		));
 	}
 
