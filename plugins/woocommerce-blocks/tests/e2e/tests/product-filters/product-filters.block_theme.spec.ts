@@ -40,8 +40,8 @@ test.describe( `${ blockData.name }`, () => {
 		await admin.visitSiteEditor( {
 			postId: `woocommerce/woocommerce//${ blockData.slug }`,
 			postType: 'wp_template',
+			canvas: 'edit',
 		} );
-		await editor.enterEditMode();
 	} );
 
 	test( 'should be visible and contain correct inner blocks', async ( {
