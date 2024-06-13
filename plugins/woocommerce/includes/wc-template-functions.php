@@ -2855,7 +2855,7 @@ if ( ! function_exists( 'woocommerce_form_field' ) ) {
 		if ( $args['required'] ) {
 			// hidden inputs are the only kind of inputs that don't need an `aria-required` attribute.
 			// checkboxes apply the `custom_attributes` to the label - we need to apply the attribute on the input itself, instead.
-			if ( ! in_array( $args['type'], [ 'hidden', 'checkbox' ], true ) ) {
+			if ( ! in_array( $args['type'], array( 'hidden', 'checkbox' ), true ) ) {
 				$args['custom_attributes']['aria-required'] = 'true';
 			}
 
