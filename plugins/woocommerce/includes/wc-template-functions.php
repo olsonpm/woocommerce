@@ -1013,7 +1013,7 @@ if ( ! function_exists( 'woocommerce_content' ) ) {
 
 				<?php do_action( 'woocommerce_after_shop_loop' ); ?>
 
-			<?php
+				<?php
 			else :
 				do_action( 'woocommerce_no_products_found' );
 			endif;
@@ -3760,13 +3760,13 @@ function wc_logout_url( $redirect = '' ) {
 function wc_empty_cart_message() {
 	$notice = wc_print_notice(
 		wp_kses_post(
-		/**
-		 * Filter empty cart message text.
-		 *
-		 * @since 3.1.0
-		 * @param string $message Default empty cart message.
-		 * @return string
-		 */
+			/**
+			 * Filter empty cart message text.
+			 *
+			 * @since 3.1.0
+			 * @param string $message Default empty cart message.
+			 * @return string
+			 */
 			apply_filters( 'wc_empty_cart_message', __( 'Your cart is currently empty.', 'woocommerce' ) )
 		),
 		'notice',
