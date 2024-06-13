@@ -1013,7 +1013,7 @@ if ( ! function_exists( 'woocommerce_content' ) ) {
 
 				<?php do_action( 'woocommerce_after_shop_loop' ); ?>
 
-				<?php
+			<?php
 			else :
 				do_action( 'woocommerce_no_products_found' );
 			endif;
@@ -2854,7 +2854,8 @@ if ( ! function_exists( 'woocommerce_form_field' ) ) {
 
 		if ( $args['required'] ) {
 			// hidden inputs are the only kind of inputs that don't need an `aria-required` attribute.
-			if ( 'hidden' !== $args['type'] ) {
+			// checkboxes apply the `custom_attributes` to the label - we need to apply the attribute on the input itself, instead.
+			if ( ! in_array( $args['type'], [ 'hidden', 'checkbox' ], true ) ) {
 				$args['custom_attributes']['aria-required'] = 'true';
 			}
 
@@ -2982,12 +2983,13 @@ if ( ! function_exists( 'woocommerce_form_field' ) ) {
 				}
 
 				$field .= sprintf(
-					'<input type="checkbox" name="%1$s" id="%2$s" value="%3$s" class="%4$s" %5$s /> %6$s',
+					'<input type="checkbox" name="%1$s" id="%2$s" value="%3$s" class="%4$s" %5$s%6$s /> %7$s',
 					esc_attr( $key ),
 					esc_attr( $args['id'] ),
 					esc_attr( $args['checked_value'] ),
 					esc_attr( 'input-checkbox ' . implode( ' ', $args['input_class'] ) ),
 					checked( $value, $args['checked_value'], false ),
+					$args['required'] ? ' aria-required="true"' : '',
 					wp_kses_post( $args['label'] )
 				);
 
@@ -3758,13 +3760,13 @@ function wc_logout_url( $redirect = '' ) {
 function wc_empty_cart_message() {
 	$notice = wc_print_notice(
 		wp_kses_post(
-			/**
-			 * Filter empty cart message text.
-			 *
-			 * @since 3.1.0
-			 * @param string $message Default empty cart message.
-			 * @return string
-			 */
+		/**
+		 * Filter empty cart message text.
+		 *
+		 * @since 3.1.0
+		 * @param string $message Default empty cart message.
+		 * @return string
+		 */
 			apply_filters( 'wc_empty_cart_message', __( 'Your cart is currently empty.', 'woocommerce' ) )
 		),
 		'notice',
